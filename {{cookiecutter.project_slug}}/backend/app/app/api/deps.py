@@ -37,10 +37,10 @@ def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = crud.user.get(db, id=token_data.sub)
-    if not user:
+    if user := crud.user.get(db, id=token_data.sub):
+        return user
+    else:
         raise HTTPException(status_code=404, detail="User not found")
-    return user
 
 
 def get_current_active_user(
